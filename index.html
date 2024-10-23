@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domain Hoster</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Domain Registration</h1>
+    <form id="domainForm">
+        <input type="text" id="domain" name="domain" placeholder="Enter domain name" required>
+        <button type="submit">Check Availability</button>
+    </form>
+    <div id="result"></div>
+    
+    <script>
+        $(document).ready(function() {
+            $('#domainForm').on('submit', function(e) {
+                e.preventDefault();
+                const domain = $('#domain').val();
+
+                $.post('/check_domain', { domain: domain }, function(data) {
+                    if (data.available) {
+                        $('#result').html('<p>' + data.message + '</p><button onclick="registerDomain()">Register Domain</button>');
+                    } else {
+                        $('#result').html('<p>' + data.message + '</p>');
+                    }
+                });
+            });
+        });
+
+        function registerDomain() {
+            const domain = $('#domain').val();
+
+            $.post('/register_domain', { domain: domain }, function(data) {
+                $('#result').html('<p>' + data.message + '</p>');
+            });
+        }
+    </script>
+</body>
+</html>
