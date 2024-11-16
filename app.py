@@ -1,23 +1,19 @@
-from flask import Flask, render_template, send_from_directory
-import os
+from flask import Flask, send_file, render_template
 
 app = Flask(__name__)
 
-# Specify the directory and file name
-FILE_DIRECTORY = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'downloads')
-FILE_NAME = "seif.zip"
+# Replace 'seif.zip' with the actual path to your file
+FILE_PATH = "seif.zip"
 
 @app.route("/")
-def home():
+def index():
+    # Render the index.html file
     return render_template("index.html")
 
 @app.route("/download")
 def download_file():
-    try:
-        # Send the file as an attachment
-        return send_from_directory(FILE_DIRECTORY, FILE_NAME, as_attachment=True)
-    except FileNotFoundError:
-        return "File not found. Please check the file path.", 404
+    # Send the file for download
+    return send_file(FILE_PATH, as_attachment=True)
 
 if __name__ == "__main__":
     app.run(debug=True)
